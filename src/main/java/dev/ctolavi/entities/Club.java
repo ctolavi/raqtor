@@ -1,7 +1,6 @@
 package dev.ctolavi.entities;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,17 +17,25 @@ import java.util.Set;
 
 @Entity
 @Data
-@EqualsAndHashCode(exclude = "playerClubs")
 @ToString(exclude = "playerClubs")
-public class Player {
+@EqualsAndHashCode(exclude = "playerClubs")
+public class Club {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String street;
+
     private String name;
 
-    private String surnames;
+    private String shortName;
+
+    private String logo;
+
+    private String city;
+
+    private String country;
 
     @CreationTimestamp
     private LocalDate createDate;
@@ -36,7 +43,7 @@ public class Player {
     @UpdateTimestamp
     private LocalDate updateDate;
 
-    @OneToMany(mappedBy = "player", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "club")
     private Set<PlayerClub> playerClubs = new HashSet<>();
 
 }

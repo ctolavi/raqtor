@@ -1,11 +1,12 @@
 package dev.ctolavi.entities;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -13,14 +14,13 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Data
-@EqualsAndHashCode(exclude = "playerClubs")
-@ToString(exclude = "playerClubs")
-public class Player {
+@EqualsAndHashCode(exclude = "categories")
+@ToString(exclude = "categories")
+public class Tournament {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +28,11 @@ public class Player {
 
     private String name;
 
-    private String surnames;
+    private LocalDate end_registration_date;
+
+    private LocalDate start_date;
+
+    private LocalDate end_date;
 
     @CreationTimestamp
     private LocalDate createDate;
@@ -36,7 +40,11 @@ public class Player {
     @UpdateTimestamp
     private LocalDate updateDate;
 
-    @OneToMany(mappedBy = "player", fetch = FetchType.LAZY)
-    private Set<PlayerClub> playerClubs = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "tournament_category",
+            joinColumns = @JoinColumn(name = "tournament_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories;
 
 }
